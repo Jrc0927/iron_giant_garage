@@ -1,0 +1,113 @@
+<%- include("partials/header.ejs") %>
+
+<body class="page">
+  <header>
+    <h1>Exercises</h1>
+  </header>
+
+  <%- include("partials/nav.ejs") %>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Filters</h2>
+
+      <form action="/exercises" method="GET" class="row">
+        <select name="muscle" id="muscle">
+          <option value="">All muscles</option>
+          <% for (m of muscles) { %>
+            <option value="<%= m.muscle_group %>"><%= m.muscle_group %></option>
+          <% } %>
+        </select>
+
+        <select name="equipment" id="equipment">
+          <option value="">All equipment</option>
+          <% for (e of equipment) { %>
+            <option value="<%= e.equipment %>"><%= e.equipment %></option>
+          <% } %>
+        </select>
+
+        <label>
+          <input type="checkbox" id="noEquip">
+          No equipment exercises only
+        </label>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Exercise list</h2>
+
+      <ul id="exerciseList" class="list">
+        <% for (ex of exercises) { %>
+          <li>
+            <h3><%= ex.name %></h3>
+
+            <div class="meta">
+              <span><%= ex.muscle_group %></span>
+              <span><%= ex.equipment || 'None' %></span>
+              <span><%= ex.difficulty %></span>
+            </div>
+
+            <% if (ex.description) { %>
+              <p><%= ex.description %></p>
+            <% } %>
+
+            <p>
+              <a class="link" href="/exercises?editId=<%= ex.id %>">Edit</a>
+              <a class="link" href="/exercises/delete?id=<%= ex.id %>">Delete</a>
+            </p>
+          </li>
+        <% } %>
+      </ul>
+    </section>
+
+    <section class="card">
+      <% if (editExercise) { %>
+        <h2>Edit exercise</h2>
+
+        <form action="/exercises/update" method="POST" id="editExerciseForm" class="stack">
+          <input type="hidden" name="id" value="<%= editExercise.id %>">
+
+          <input type="text" name="name" placeholder="name" value="<%= editExercise.name %>">
+          <input type="text" name="muscle_group" placeholder="muscle group" value="<%= editExercise.muscle_group %>">
+          <input type="text" name="equipment" placeholder="equipment (optional)" value="<%= editExercise.equipment || '' %>">
+
+          <div class="row">
+            <label><input type="radio" name="difficulty" value="Beginner" <%= editExercise.difficulty === "Beginner" ? "checked" : "" %>> Beginner</label>
+            <label><input type="radio" name="difficulty" value="Intermediate" <%= editExercise.difficulty === "Intermediate" ? "checked" : "" %>> Intermediate</label>
+            <label><input type="radio" name="difficulty" value="Advanced" <%= editExercise.difficulty === "Advanced" ? "checked" : "" %>> Advanced</label>
+          </div>
+
+          <textarea name="description" placeholder="description (optional)"><%= editExercise.description || "" %></textarea>
+
+          <button>Update exercise</button>
+          <a class="link" href="/exercises">Cancel</a>
+          <span id="editMsg"></span>
+        </form>
+
+      <% } else { %>
+
+        <h2>Add exercise</h2>
+
+        <form action="/exercises/add" method="POST" id="addExerciseForm" class="stack">
+          <input type="text" name="name" placeholder="name">
+          <input type="text" name="muscle_group" placeholder="muscle group">
+          <input type="text" name="equipment" placeholder="equipment (optional)">
+
+          <div class="row">
+            <label><input type="radio" name="difficulty" value="Beginner"> Beginner</label>
+            <label><input type="radio" name="difficulty" value="Intermediate"> Intermediate</label>
+            <label><input type="radio" name="difficulty" value="Advanced"> Advanced</label>
+          </div>
+
+          <textarea name="description" placeholder="description (optional)"></textarea>
+
+          <button>Add exercise</button>
+          <span id="addMsg"></span>
+        </form>
+
+      <% } %>
+
+    </section>
+  </main>
+
+<%- include("partials/footer.ejs") %>

@@ -1,0 +1,70 @@
+<%- include("partials/header.ejs") %>
+
+<body class="page">
+  <header>
+    <h1>Workout History</h1>
+    <p class="sub">Log a workout</p>
+  </header>
+
+  <%- include("partials/nav.ejs") %>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Log workout</h2>
+
+      <form action="/history/add" method="POST" id="addWorkoutForm" class="stack">
+        <label>
+          Date:
+          <input type="date" name="workout_date" id="workout_date">
+        </label>
+
+        <label>
+          Routine:
+          <select name="routine_id" id="routine_id">
+            <option value="">(none)</option>
+            <% for (r of routines) { %>
+              <option value="<%= r.id %>"><%= r.name %></option>
+            <% } %>
+          </select>
+        </label>
+
+        <label>
+          <input type="checkbox" id="rememberRoutine">
+          Remember this routine for next time
+        </label>
+
+        <textarea name="notes" placeholder="notes (optional)"></textarea>
+
+        <button>Add workout</button>
+        <span id="workoutMsg"></span>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Recent workouts</h2>
+
+      <ul class="list">
+        <% for (w of workouts) { %>
+          <li class="item">
+            <div class="title">
+              <strong><%= w.workout_date %> — <%= w.routine_name || "No routine" %></strong>
+            </div>
+
+            <% if (w.notes) { %>
+              <p class="desc"><%= w.notes %></p>
+            <% } %>
+
+            <div class="actions">
+              <a class="link"
+                href="/history/delete?id=<%= w.id %>"
+                onclick="return confirm('Delete this workout?');">
+                [Delete]
+              </a>
+            </div>
+          </li>
+        <% } %>
+      </ul>
+    </section>
+  </main>
+
+<%- include("partials/footer.ejs") %>

@@ -1,0 +1,31 @@
+<%- include("partials/header.ejs") %>
+
+<body class="page">
+  <header>
+    <h1>Login</h1>
+    <p class="sub">Sign in to access your routines</p>
+  </header>
+
+  <%- include("partials/nav.ejs") %>
+
+  <main class="wrap">
+    <section class="card">
+      <form method="POST" action="/login" class="stack">
+        <input name="email" placeholder="email" />
+        <input type="password" name="password" placeholder="password" />
+
+        <button>Login</button>
+
+        <% if (error) { %>
+          <p class="small"><%= error %></p>
+        <% } %>
+
+        <p class="small">
+          No account yet?
+          <a class="link" href="/register">Sign up</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+<%- include("partials/footer.ejs") %>

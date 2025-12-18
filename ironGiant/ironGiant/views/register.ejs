@@ -1,0 +1,33 @@
+<%- include("partials/header.ejs") %>
+
+<body class="page">
+  <header>
+    <h1>Sign Up</h1>
+    <p class="sub">Create an account to save routines and workouts</p>
+  </header>
+
+  <%- include("partials/nav.ejs") %>
+
+  <main class="wrap">
+    <section class="card">
+      <form action="/register" method="POST" class="stack">
+        <input name="name" placeholder="name" />
+        <input name="email" placeholder="email" />
+        <input type="password" name="password" placeholder="password" />
+        <input type="password" name="confirm" placeholder="confirm password" />
+
+        <button>Create account</button>
+
+        <% if (error) { %>
+          <p class="small"><%= error %></p>
+        <% } %>
+
+        <p class="small">
+          Already have an account?
+          <a class="link" href="/login">Login</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+<%- include("partials/footer.ejs") %>

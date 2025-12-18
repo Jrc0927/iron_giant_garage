@@ -1,0 +1,95 @@
+<%- include("partials/header.ejs") %>
+
+<body class="page">
+  <header>
+    <h1>Routines</h1>
+    <p class="sub">Create a routine and attach exercises</p>
+  </header>
+
+  <%- include("partials/nav.ejs") %>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Add routine</h2>
+
+      <form id="addRoutineForm" action="/routines/add" method="POST" class="row">
+        <input type="text" name="name" placeholder="routine name (e.g. Push)">
+        <button>Add</button>
+        <span id="routineMsg"></span>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>My routines</h2>
+
+      <ul class="list">
+        <% for (r of routines) { %>
+          <li class="item">
+            <div class="title">
+              <a class="link" href="/routines?routineId=<%= r.id %>"><%= r.name %></a>
+              <a class="link" href="/routines/delete?id=<%= r.id %>" onclick="return confirm('Delete this routine?');">Delete</a>        
+            </div>
+          </li>
+        <% } %>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Routine details</h2>
+
+      <% if (routine) { %>
+        <h3><%= routine.name %></h3>
+
+        <form action="/routines/update" method="POST" class="row">
+          <input type="hidden" name="routine_id" value="<%= routine.id %>">
+          <input type="text" name="name" placeholder="new routine name" value="<%= routine.name %>">
+          <button type="submit">Rename</button>
+        </form>
+
+        <form id="addRoutineExerciseForm" action="/routines/addExercise" method="POST" class="stack">
+          <input type="hidden" name="routine_id" value="<%= routine.id %>">
+
+          <select name="exercise_id">
+            <% for (e of exercises) { %>
+              <option value="<%= e.id %>"><%= e.name %></option>
+            <% } %>
+          </select>
+
+          <div class="row">
+            <input type="text" name="default_sets" placeholder="sets">
+            <input type="text" name="default_reps" placeholder="reps">
+            <input type="text" name="sort_order" placeholder="order">
+          </div>
+
+          <button>Add to routine</button>
+          <span id="routineExerciseMsg"></span>
+        </form>
+
+        <hr>
+
+        <ul class="list">
+          <% for (re of routineExercises) { %>
+            <li class="item">
+              <div class="title"><%= re.name %></div>
+              <form action="/routines/updateExercise" method="POST" class="row">
+                <input type="hidden" name="routine_exercise_id" value="<%= re.routine_exercise_id %>">
+                <input type="hidden" name="routine_id" value="<%= routine.id %>">
+
+                Sets: <input type="text" name="default_sets" value="<%= re.default_sets || "" %>" placeholder="sets">
+                Reps: <input type="text" name="default_reps" value="<%= re.default_reps || "" %>" placeholder="reps">
+                Order: <input type="text" name="sort_order" value="<%= re.sort_order || "" %>" placeholder="order">
+
+                <button type="submit">Update Routine</button>
+                <a class="link" href="/routines/deleteExercise?id=<%= re.routine_exercise_id %>&routineId=<%= routine.id %>">Remove</a>
+              </form>
+            </li>
+          <% } %>
+        </ul>
+
+      <% } else { %>
+        <p>Select a routine to see details.</p>
+      <% } %>
+    </section>
+  </main>
+
+<%- include("partials/footer.ejs") %>

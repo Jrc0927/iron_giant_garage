@@ -1,0 +1,16 @@
+<nav>
+  <a href="/">Dashboard</a>
+  <a href="/exercises">Exercises</a>
+  <a href="/routines">Routines</a>
+  <a href="/history">History</a>
+
+  <span style="margin-left:auto">
+  <% if (currentUser) { %>
+    <span class="small" style="margin-left:auto">
+      Signed in as <strong><%= currentUser.name %></strong>
+      <% if (isAdmin) { %> (Admin) <% } %>
+      · <a class="link" href="/logout">Logout</a>
+    </span>
+  <% } %>
+  </span>
+</nav>

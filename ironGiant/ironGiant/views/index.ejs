@@ -1,0 +1,79 @@
+<%- include("partials/header.ejs") %>
+
+<body class="page">
+  <header>
+    <h1>Iron Giant Garage</h1>
+  </header>
+
+  <%- include("partials/nav.ejs") %>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Dashboard</h2>
+
+      <% if (currentUser) { %>
+      <p class="small">Signed in as <strong><%= currentUser.name %></strong><% if (isAdmin) { %> (Admin)<% } %></p>
+      <% } else { %>
+      <p class="small">Not signed in.</p>
+      <% } %>
+
+      <div class="grid">
+        <div class="mini">
+          <div class="label">Exercises</div>
+          <div class="big"><%= exerciseCount.total %></div>
+        </div>
+        <div class="mini">
+          <div class="label">Routines</div>
+          <div class="big"><%= routineCount.total %></div>
+        </div>
+        <div class="mini">
+          <div class="label">Workouts</div>
+          <div class="big"><%= workoutCount.total %></div>
+        </div>
+      </div>
+
+      <hr>
+
+      <h3>Daily motivation</h3>
+      <p id="quote" class="note">Loading quote...</p>
+      <p id="tip" class="note">Loading tip...</p>
+
+      <hr>
+
+      <% if (!currentUser || isAdmin) { %>
+        <hr>
+
+        <h3>Admin</h3>
+        <form id="adminForm">
+          <input type="text" name="user" placeholder="username" />
+          <input type="password" name="pass" placeholder="password" />
+          <button>Login</button>
+          <span id="adminMsg"></span>
+        </form>
+
+        <div id="adminArea" style="display:none;">
+          <p class="ok">You are logged in as admin.</p>
+          <a href="/exercises">Manage exercises</a>
+          <button id="logoutBtn" type="button">Logout</button>
+        </div>
+      <% } %>
+
+    </section>
+
+    <section class="card">
+      <h2>Quick links</h2>
+      <div class="grid-links">
+        <a class="btn" href="/exercises">Browse Exercises</a>
+        <a class="btn" href="/routines">My Routines</a>
+        <a class="btn" href="/history">Workout History</a>
+        <% if (!currentUser) { %>
+          <a class="btn" href="/register">Register</a>
+          <a class="btn" href="/login">Login</a>
+        <% } else { %>
+          <a class="btn" href="/logout">Logout</a>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+<%- include("partials/footer.ejs") %>
